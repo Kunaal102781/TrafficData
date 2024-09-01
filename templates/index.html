@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Model Prediction</h1>
+    <form id="prediction-form">
+        <label for="source_mac">Source MAC Address:</label>
+        <input type="text" id="source_mac" name="source_mac"><br>
+
+        <label for="destination_mac">Destination MAC Address:</label>
+        <input type="text" id="destination_mac" name="destination_mac"><br>
+
+        <label for="interface">Interface:</label>
+        <input type="text" id="interface" name="interface"><br>
+
+        <label for="frame_length">Frame Length:</label>
+        <input type="number" id="frame_length" name="frame_length"><br>
+
+        <label for="epoch_time">Epoch Time:</label>
+        <input type="number" id="epoch_time" name="epoch_time"><br>
+
+        <label for="source_ip">Source IP Address:</label>
+        <input type="text" id="source_ip" name="source_ip"><br>
+
+        <label for="destination_ip">Destination IP Address:</label>
+        <input type="text" id="destination_ip" name="destination_ip"><br>
+
+        <label for="dscp">DSCP:</label>
+        <input type="number" id="dscp" name="dscp"><br>
+
+        <label for="total_length">Total Length:</label>
+        <input type="number" id="total_length" name="total_length"><br>
+
+        <label for="id">ID:</label>
+        <input type="number" id="id" name="id"><br>
+
+        <label for="flags">Flags:</label>
+        <input type="text" id="flags" name="flags"><br>
+
+        <label for="ttl">TTL:</label>
+        <input type="number" id="ttl" name="ttl"><br>
+
+        <label for="protocol">Protocol:</label>
+        <input type="text" id="protocol" name="protocol"><br>
+
+        <label for="header_checksum">Header Checksum:</label>
+        <input type="text" id="header_checksum" name="header_checksum"><br>
+
+        <label for="source_port">Source Port:</label>
+        <input type="number" id="source_port" name="source_port"><br>
+
+        <label for="destination_port">Destination Port:</label>
+        <input type="number" id="destination_port" name="destination_port"><br>
+
+        <label for="udp_header_length">UDP Header Length:</label>
+        <input type="number" id="udp_header_length" name="udp_header_length"><br>
+
+        <label for="udp_header_checksum">UDP Header Checksum:</label>
+        <input type="text" id="udp_header_checksum" name="udp_header_checksum"><br>
+
+        <input type="button" value="Predict" onclick="submitForm()">
+    </form>
+
+    <h2>Prediction Result</h2>
+    <p id="result"></p>
+
+    <script>
+        function submitForm() {
+            const formData = {
+                'Source MAC Address': document.getElementById('source_mac').value,
+                'Destination MAC Address': document.getElementById('destination_mac').value,
+                'Interface': document.getElementById('interface').value,
+                'Frame Length': document.getElementById('frame_length').value,
+                'Epoch Time': document.getElementById('epoch_time').value,
+                'Source IP Address': document.getElementById('source_ip').value,
+                'Destination IP Address': document.getElementById('destination_ip').value,
+                'DSCP': document.getElementById('dscp').value,
+                'Total Length': document.getElementById('total_length').value,
+                'ID': document.getElementById('id').value,
+                'Flags': document.getElementById('flags').value,
+                'TTL': document.getElementById('ttl').value,
+                'Protocol': document.getElementById('protocol').value,
+                'Header Checksum': document.getElementById('header_checksum').value,
+                'Source Port': document.getElementById('source_port').value,
+                'Destination Port': document.getElementById('destination_port').value,
+                'UDP Header Length': document.getElementById('udp_header_length').value,
+                'UDP Header Checksum': document.getElementById('udp_header_checksum').value
+            };
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = 'Predicted value for sniffed: ' + data.sniffed;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
